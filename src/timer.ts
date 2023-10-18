@@ -25,6 +25,7 @@ export class Timer {
 	mode: Mode;
 	pausedTime: number;  /*time left on paused timer, in milliseconds*/
 	paused: boolean;
+	reminderMode: boolean;
 	autoPaused: boolean;
 	pomosSinceStart: number;
 	cyclesSinceLastAutoStop: number;
@@ -36,6 +37,7 @@ export class Timer {
 		this.settings = plugin.settings;
 		this.mode = Mode.NoTimer;
 		this.paused = false;
+		this.reminderMode = false;
 		this.pomosSinceStart = 0;
 		this.cyclesSinceLastAutoStop = 0;
 
@@ -309,6 +311,16 @@ export class Timer {
 			this.activeNote = activeView;
 		}
 	}
+
+	handleReminder() {
+		if (!this.reminderMode || (this.mode != Mode.NoTimer && !this.paused)) {
+			return;
+		}
+		if (this.settings.useSystemNotification) {
+			showSystemNotification(Mode.NoTimer, this.settings.emoji);
+		}
+		new Notice('You forgot to turn on the timer');
+	}
 }
 
 /*Returns [HH:]mm:ss left on the current timer*/
@@ -344,8 +356,9 @@ function showSystemNotification(mode:Mode, useEmoji:boolean): void {
 			break;
 		}
 		case (Mode.NoTimer): {
-			// no system notification needed
-			return;
+			let emoji = useEmoji ? "🍅" : ""
+			text = `You forgot to turn on the timer ${emoji}`;
+			break;
 		}
 	}
 	let emoji = useEmoji ? "🍅" : ""

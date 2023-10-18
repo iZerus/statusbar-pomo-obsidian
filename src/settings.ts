@@ -11,6 +11,7 @@ export interface PomoSettings {
 	longBreakInterval: number;
 	autostartTimer: boolean;
 	numAutoCycles: number;
+	reminderInterval: number;
 	ribbonIcon: boolean;
 	emoji: boolean;
 	notificationSound: boolean;
@@ -32,6 +33,7 @@ export const DEFAULT_SETTINGS: PomoSettings = {
 	longBreakInterval: 4,
 	autostartTimer: true,
 	numAutoCycles: 0,
+	reminderInterval: 3,
 	ribbonIcon: true,
 	emoji: true,
 	notificationSound: true,
@@ -126,6 +128,16 @@ export class PomoSettingTab extends PluginSettingTab {
 						this.plugin.saveSettings();
 					}));
 		}
+
+		new Setting(containerEl)
+			.setName("Pause reminder interval (minutes)")
+			.setDesc("You can enable or disable the reminder of paused timer by 'Toggle pause reminder mode'. The setting will be applied after the restart. Leave blank for default")
+			.addText(text => text
+				.setValue(this.plugin.settings.reminderInterval.toString())
+				.onChange(value => {
+					this.plugin.settings.reminderInterval = setNumericValue(value, DEFAULT_SETTINGS.reminderInterval, this.plugin.settings.reminderInterval);
+					this.plugin.saveSettings();
+				}));
 
 
 		/************** Appearance ************************/
