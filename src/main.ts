@@ -1,4 +1,4 @@
-import { Plugin } from 'obsidian';
+import { Notice, Plugin } from 'obsidian';
 import { PomoSettingTab, PomoSettings, DEFAULT_SETTINGS } from './settings';
 import { getDailyNoteFile, Mode, Timer } from './timer';
 
@@ -36,6 +36,11 @@ export default class PomoTimerPlugin extends Plugin {
 		this.registerInterval(window.setInterval(async () =>
 			this.statusBar.setText(await this.timer.setStatusBarText()), 500));
 
+		/* Reminder */
+		this.registerInterval(window.setInterval(async () => {
+			this.timer.handleReminder();
+		}, 1_000 * 60 * this.settings.reminderInterval));
+
 		this.addCommand({
 			id: 'start-satusbar-pomo',
 			name: 'Start pomodoro',
@@ -45,6 +50,23 @@ export default class PomoTimerPlugin extends Plugin {
 				if (leaf) {
 					if (!checking) {
 						this.timer.startTimer(Mode.Pomo);
+					}
+					return true;
+				}
+				return false;
+			}
+		});
+
+		this.addCommand({
+			id: 'toggle-reminder-satusbar-pomo',
+			name: 'Toggle pause reminder mode',
+			icon: 'play',
+			checkCallback: (checking: boolean) => {
+				let leaf = this.app.workspace.activeLeaf;
+				if (leaf) {
+					if (!checking) {
+						this.timer.reminderMode = !this.timer.reminderMode;
+						new Notice(`Pause reminder mode is ${this.timer.reminderMode ? 'on' : 'off'}`);
 					}
 					return true;
 				}
