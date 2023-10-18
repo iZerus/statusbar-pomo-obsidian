@@ -3,7 +3,7 @@
 	"name": "Status Bar Pomodoro Timer",
 	"version": "0.1.14",
 	"minAppVersion": "0.9.12",
-	"description": "Adds a pomodoro timer to your status bar. Forked by iZerus. Added disabled timer reminder",
+	"description": "Adds a pomodoro timer to your status bar. Forked by iZerus. Added pause reminder mode",
 	"author": "iZerus",
 	"authorUrl": "",
 	"isDesktopOnly": true
