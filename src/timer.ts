@@ -71,13 +71,24 @@ export class Timer {
 				reminder_icon = ' 🔔';
 			}
 
+			let pomos_in_cycle = '';
+			let pomos = 0;
+			if (this.settings.showCycles) {
+				if (this.mode == Mode.Pomo) {
+					pomos = (this.pomosSinceStart + 1) % this.settings.longBreakInterval;
+				} else {
+					pomos = this.pomosSinceStart % this.settings.longBreakInterval;
+				}
+				pomos_in_cycle += pomos == 0 ? this.settings.longBreakInterval : pomos;
+			}
+
 			if (this.paused === true) {
-				return timer_type_symbol + millisecsToString(this.pausedTime) + reminder_icon; //just show the paused time
+				return pomos_in_cycle + timer_type_symbol + millisecsToString(this.pausedTime) + reminder_icon; //just show the paused time
 			} else if (moment().isSameOrAfter(this.endTime)) {
 				await this.handleTimerEnd();
 			}
 
-			return timer_type_symbol + millisecsToString(this.getCountdown()) + reminder_icon; //return display value
+			return pomos_in_cycle + timer_type_symbol + millisecsToString(this.getCountdown()) + reminder_icon; //return display value
 		} else {
 			return ""; //fixes TypeError: failed to execute 'appendChild' on 'Node https://github.com/kzhovn/statusbar-pomo-obsidian/issues/4
 		}
