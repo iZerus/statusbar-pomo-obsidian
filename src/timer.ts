@@ -66,13 +66,18 @@ export class Timer {
 				}
 			}
 
+			let reminder_icon = '';
+			if (this.settings.reminderIcon && this.reminderMode) {
+				reminder_icon = ' 🔔';
+			}
+
 			if (this.paused === true) {
-				return timer_type_symbol + millisecsToString(this.pausedTime); //just show the paused time
+				return timer_type_symbol + millisecsToString(this.pausedTime) + reminder_icon; //just show the paused time
 			} else if (moment().isSameOrAfter(this.endTime)) {
 				await this.handleTimerEnd();
 			}
 
-			return timer_type_symbol + millisecsToString(this.getCountdown()); //return display value
+			return timer_type_symbol + millisecsToString(this.getCountdown()) + reminder_icon; //return display value
 		} else {
 			return ""; //fixes TypeError: failed to execute 'appendChild' on 'Node https://github.com/kzhovn/statusbar-pomo-obsidian/issues/4
 		}
