@@ -13,6 +13,7 @@ export interface PomoSettings {
 	numAutoCycles: number;
 	reminderInterval: number;
 	reminderIcon: boolean;
+	showCycles: boolean;
 	ribbonIcon: boolean;
 	emoji: boolean;
 	notificationSound: boolean;
@@ -36,6 +37,7 @@ export const DEFAULT_SETTINGS: PomoSettings = {
 	numAutoCycles: 0,
 	reminderInterval: 3,
 	reminderIcon: true,
+	showCycles: false,
 	ribbonIcon: true,
 	emoji: true,
 	notificationSound: true,
@@ -148,6 +150,17 @@ export class PomoSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.reminderIcon)
 				.onChange(value => {
 					this.plugin.settings.reminderIcon = value;
+					this.plugin.saveSettings();
+					this.display() //force refresh
+				}));
+
+		new Setting(containerEl)
+		.setName("Pomodoro cycles in sidebar")
+		.setDesc("Show number of pomodoro cycles in sidebar")
+		.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.showCycles)
+				.onChange(value => {
+					this.plugin.settings.showCycles = value;
 					this.plugin.saveSettings();
 					this.display() //force refresh
 				}));
