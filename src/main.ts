@@ -58,6 +58,40 @@ export default class PomoTimerPlugin extends Plugin {
 		});
 
 		this.addCommand({
+			id: 'start-short-break-satusbar-pomo',
+			name: 'Start short break pomodoro',
+			icon: 'play',
+			checkCallback: (checking: boolean) => {
+				let leaf = this.app.workspace.activeLeaf;
+				if (leaf) {
+					if (!checking) {
+						this.timer.pomosSinceStart++;
+						this.timer.startTimer(Mode.ShortBreak);
+					}
+					return true;
+				}
+				return false;
+			}
+		});
+
+		this.addCommand({
+			id: 'start-long-break-satusbar-pomo',
+			name: 'Start long break pomodoro',
+			icon: 'play',
+			checkCallback: (checking: boolean) => {
+				let leaf = this.app.workspace.activeLeaf;
+				if (leaf) {
+					if (!checking) {
+						this.timer.pomosSinceStart++;
+						this.timer.startTimer(Mode.LongBreak);
+					}
+					return true;
+				}
+				return false;
+			}
+		});
+
+		this.addCommand({
 			id: 'toggle-reminder-satusbar-pomo',
 			name: 'Toggle pause reminder mode',
 			icon: 'play',
