@@ -26,6 +26,7 @@ export class Timer {
 	pausedTime: number;  /*time left on paused timer, in milliseconds*/
 	paused: boolean;
 	reminderMode: boolean;
+	skipReminder: boolean;
 	autoPaused: boolean;
 	pomosSinceStart: number;
 	cyclesSinceLastAutoStop: number;
@@ -37,6 +38,7 @@ export class Timer {
 		this.settings = plugin.settings;
 		this.mode = Mode.NoTimer;
 		this.paused = false;
+		this.skipReminder = true;
 		this.reminderMode = false;
 		this.pomosSinceStart = 0;
 		this.cyclesSinceLastAutoStop = 0;
@@ -330,6 +332,12 @@ export class Timer {
 
 	handleReminder() {
 		if (!this.reminderMode || (this.mode != Mode.NoTimer && !this.paused)) {
+			this.skipReminder = true;
+			return;
+		}
+		// Skip first reminder
+		if (this.skipReminder) {
+			this.skipReminder = false;
 			return;
 		}
 		if (this.settings.useSystemNotification) {
