@@ -343,6 +343,9 @@ export class Timer {
 		if (this.settings.useSystemNotification) {
 			showSystemNotification(Mode.NoTimer, this.settings.emoji);
 		}
+		if (this.settings.playReminderSound) {
+			playNotification();
+		}
 		new Notice('You forgot to turn on the timer');
 	}
 }

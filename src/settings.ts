@@ -14,6 +14,7 @@ export interface PomoSettings {
 	reminderInterval: number;
 	reminderIcon: boolean;
 	showCycles: boolean;
+	playReminderSound: boolean;
 	ribbonIcon: boolean;
 	emoji: boolean;
 	notificationSound: boolean;
@@ -38,6 +39,7 @@ export const DEFAULT_SETTINGS: PomoSettings = {
 	reminderInterval: 3,
 	reminderIcon: true,
 	showCycles: false,
+	playReminderSound: true,
 	ribbonIcon: true,
 	emoji: true,
 	notificationSound: true,
@@ -161,6 +163,17 @@ export class PomoSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.showCycles)
 				.onChange(value => {
 					this.plugin.settings.showCycles = value;
+					this.plugin.saveSettings();
+					this.display() //force refresh
+				}));
+
+		new Setting(containerEl)
+		.setName("Reminder with sound")
+		.setDesc("Play a sound during a reminder")
+		.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.playReminderSound)
+				.onChange(value => {
+					this.plugin.settings.playReminderSound = value;
 					this.plugin.saveSettings();
 					this.display() //force refresh
 				}));
