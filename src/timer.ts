@@ -404,7 +404,7 @@ function showSystemNotification(mode:Mode, useEmoji:boolean): void {
 	n.show();
 }
 
-export async function getDailyNoteFile(): Promise<TFile> {
+export async function getDailyNoteFile(): Promise<any> {
 	const file = getDailyNote(moment() as any, getAllDailyNotes()); // as any, because getDailyNote is importing its own Moment and I'm using Obsidian's
 
 	if (!file) {
