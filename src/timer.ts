@@ -103,6 +103,10 @@ export class Timer {
 			if (this.settings.logging === true) {
 				await this.logPomo();
 			}
+
+			if (this.settings.whiteNoise === true) {
+				this.whiteNoisePlayer.stopWhiteNoise();
+			}
 		} else if (this.mode === Mode.ShortBreak || this.mode === Mode.LongBreak) {
 			this.cyclesSinceLastAutoStop += 1;
 		}
