@@ -11,6 +11,7 @@ export interface PomoSettings {
 	longBreakInterval: number;
 	autostartTimer: boolean;
 	numAutoCycles: number;
+	tictacVolume: number;
 	reminderInterval: number;
 	reminderIcon: boolean;
 	showCycles: boolean;
@@ -36,6 +37,7 @@ export const DEFAULT_SETTINGS: PomoSettings = {
 	longBreakInterval: 4,
 	autostartTimer: true,
 	numAutoCycles: 0,
+	tictacVolume: 50,
 	reminderInterval: 3,
 	reminderIcon: true,
 	showCycles: false,
@@ -244,6 +246,18 @@ export class PomoSettingTab extends PluginSettingTab {
 
 						this.display();
 					}));
+
+		new Setting(containerEl)
+			.setName("Tictac volume")
+			.setDesc("Set tictac volume from 0 to 100")
+			.addText(text => text
+				.setValue(this.plugin.settings.tictacVolume.toString())
+				.onChange(value => {
+					this.plugin.settings.tictacVolume = setNumericValue(value, DEFAULT_SETTINGS.tictacVolume, this.plugin.settings.tictacVolume);
+					this.plugin.settings.tictacVolume = Math.min(100, this.plugin.settings.tictacVolume);
+					this.plugin.settings.tictacVolume = Math.max(0, this.plugin.settings.tictacVolume);
+					this.plugin.saveSettings();
+				}));
 
 
 		/**************  Logging settings **************/

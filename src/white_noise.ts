@@ -19,6 +19,7 @@ export class WhiteNoise {
 	whiteNoise() {
 		if (this.plugin.timer.mode === Mode.Pomo && this.plugin.timer.paused === false) {
 			this.whiteNoisePlayer.play();
+			this.whiteNoisePlayer.volume = this.plugin.settings.tictacVolume / 100;
 		} else {
 			this.stopWhiteNoise();
 		}
