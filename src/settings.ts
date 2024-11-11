@@ -227,8 +227,8 @@ export class PomoSettingTab extends PluginSettingTab {
 					}));
 
 		new Setting(containerEl)
-			.setName("White noise")
-			.setDesc("Play white noise while timer is active")
+			.setName("Tictac")
+			.setDesc("Play tictac while timer is active")
 			.addToggle(toggle => toggle
 					.setValue(this.plugin.settings.whiteNoise)
 					.onChange(value => {
