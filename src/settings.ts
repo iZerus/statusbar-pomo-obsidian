@@ -16,6 +16,7 @@ export interface PomoSettings {
 	reminderIcon: boolean;
 	showCycles: boolean;
 	playReminderSound: boolean;
+	hideTime: boolean;
 	ribbonIcon: boolean;
 	emoji: boolean;
 	notificationSound: boolean;
@@ -42,6 +43,7 @@ export const DEFAULT_SETTINGS: PomoSettings = {
 	reminderIcon: true,
 	showCycles: false,
 	playReminderSound: true,
+	hideTime: false,
 	ribbonIcon: true,
 	emoji: true,
 	notificationSound: true,
@@ -179,6 +181,16 @@ export class PomoSettingTab extends PluginSettingTab {
 					this.plugin.saveSettings();
 					this.display() //force refresh
 				}));
+
+		new Setting(containerEl)
+			.setName("Hide time")
+			.setDesc("Hide the remaining time")
+			.addToggle(toggle => toggle
+					.setValue(this.plugin.settings.hideTime)
+					.onChange(value => {
+						this.plugin.settings.hideTime = value;
+						this.plugin.saveSettings();
+					}));
 
 
 		/************** Appearance ************************/
