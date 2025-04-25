@@ -32,7 +32,7 @@ export class Timer {
 	cyclesSinceLastAutoStop: number;
 	activeNote: TFile;
 	whiteNoisePlayer: WhiteNoise;
-	forgotReminders: number;
+	missedReminders: number;
 	reminderTicks: number;
 
 	constructor(plugin: PomoTimerPlugin) {
@@ -44,7 +44,7 @@ export class Timer {
 		this.reminderMode = false;
 		this.pomosSinceStart = 0;
 		this.cyclesSinceLastAutoStop = 0;
-		this.forgotReminders = 0;
+		this.missedReminders = 0;
 		this.reminderTicks = 0;
 
 		if (this.settings.whiteNoise === true) {
@@ -201,7 +201,7 @@ export class Timer {
 	}
 
 	startTimer(mode: Mode = null): void {
-		this.forgotReminders = 0;
+		this.missedReminders = 0;
 		this.setupTimer(mode);
 		this.paused = false; //do I need this?
 
@@ -360,7 +360,7 @@ export class Timer {
 
 	handleReminder() {
 		this.reminderTicks++;
-		if (this.forgotReminders < this.settings.missedRemindersBeforeIntensive) {
+		if (this.missedReminders < this.settings.missedRemindersBeforeIntensive) {
 			if (this.reminderTicks % (this.settings.reminderInterval * 60)) {
 				return;
 			}
@@ -379,14 +379,14 @@ export class Timer {
 			return;
 		}
 
-		this.forgotReminders++;
+		this.missedReminders++;
 		if (this.settings.useSystemNotification) {
 			showSystemNotification(Mode.NoTimer, this.settings.emoji);
 		}
 		if (this.settings.playReminderSound) {
 			playNotification();
 		}
-		new Notice('You forgot to turn on the timer ' + this.forgotReminders);
+		new Notice('You forgot to turn on the timer ' + this.missedReminders);
 	}
 }
 
