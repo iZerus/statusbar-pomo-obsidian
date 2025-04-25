@@ -65,7 +65,9 @@ export default class PomoTimerPlugin extends Plugin {
 				let leaf = this.app.workspace.activeLeaf;
 				if (leaf) {
 					if (!checking) {
-						this.timer.pomosSinceStart++;
+						if (this.settings.breakIncreasePomos) {
+							this.timer.pomosSinceStart++;
+						}
 						this.timer.startTimer(Mode.ShortBreak);
 					}
 					return true;
@@ -82,7 +84,9 @@ export default class PomoTimerPlugin extends Plugin {
 				let leaf = this.app.workspace.activeLeaf;
 				if (leaf) {
 					if (!checking) {
-						this.timer.pomosSinceStart++;
+						if (this.settings.breakIncreasePomos) {
+							this.timer.pomosSinceStart++;
+						}
 						this.timer.startTimer(Mode.LongBreak);
 					}
 					return true;

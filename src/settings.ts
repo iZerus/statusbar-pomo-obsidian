@@ -31,6 +31,7 @@ export interface PomoSettings {
 	logActiveNote: boolean;
 	fancyStatusBar: boolean;
 	whiteNoise: boolean;
+	breakIncreasePomos: boolean;
 }
 
 export const DEFAULT_SETTINGS: PomoSettings = {
@@ -60,6 +61,7 @@ export const DEFAULT_SETTINGS: PomoSettings = {
 	logActiveNote: false,
 	fancyStatusBar: false,
 	whiteNoise: false,
+	breakIncreasePomos: false,
 }
 
 
@@ -116,6 +118,16 @@ export class PomoSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.longBreakInterval.toString())
 				.onChange(value => {
 					this.plugin.settings.longBreakInterval = setNumericValue(value, DEFAULT_SETTINGS.longBreakInterval, this.plugin.settings.longBreakInterval);
+					this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName("Breaks increase pomo cycles")
+			.setDesc("If true, then you need to use the native button 'Start Pomodoro' in the ribbon menu")
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.breakIncreasePomos)
+				.onChange(value => {
+					this.plugin.settings.breakIncreasePomos = value;
 					this.plugin.saveSettings();
 				}));
 

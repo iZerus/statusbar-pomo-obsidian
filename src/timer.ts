@@ -80,10 +80,10 @@ export class Timer {
 			let pomos_in_cycle = '';
 			let pomos = 0;
 			if (this.settings.showCycles) {
-				if (this.mode == Mode.Pomo) {
-					pomos = (this.pomosSinceStart + 1) % this.settings.longBreakInterval;
-				} else {
+				if (this.settings.breakIncreasePomos && this.mode != Mode.Pomo) {
 					pomos = this.pomosSinceStart % this.settings.longBreakInterval;
+				} else {
+					pomos = (this.pomosSinceStart + 1) % this.settings.longBreakInterval;
 				}
 				pomos_in_cycle += pomos == 0 ? this.settings.longBreakInterval : pomos;
 			}
