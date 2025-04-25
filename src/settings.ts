@@ -42,7 +42,7 @@ export const DEFAULT_SETTINGS: PomoSettings = {
 	numAutoCycles: 0,
 	tictacVolume: 50,
 	missedRemindersBeforeIntensive: 3,
-	intensiveReminderInterval: 10,
+	intensiveReminderInterval: 15,
 	reminderInterval: 3,
 	reminderIcon: true,
 	showCycles: false,
