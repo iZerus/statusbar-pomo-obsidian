@@ -1,6 +1,6 @@
 import { Notice, moment, TFolder, TFile } from 'obsidian';
 import { getDailyNote, createDailyNote, getAllDailyNotes } from 'obsidian-daily-notes-interface';
-import { notificationUrl, whiteNoiseUrl } from './audio_urls';
+import {notificationUrl, reminderUrl, whiteNoiseUrl} from './audio_urls';
 import { WhiteNoise } from './white_noise';
 import { PomoSettings } from './settings';
 import PomoTimerPlugin from './main';
@@ -384,7 +384,7 @@ export class Timer {
 			showSystemNotification(Mode.NoTimer, this.settings.emoji);
 		}
 		if (this.settings.playReminderSound) {
-			playNotification();
+			playReminder();
 		}
 		new Notice('You forgot to turn on the timer ' + this.missedReminders);
 	}
@@ -405,6 +405,11 @@ function millisecsToString(millisecs: number): string {
 
 function playNotification(): void {
 	const audio = new Audio(notificationUrl);
+	audio.play();
+}
+
+function playReminder(): void {
+	const audio = new Audio(reminderUrl);
 	audio.play();
 }
 
