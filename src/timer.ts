@@ -360,12 +360,12 @@ export class Timer {
 
 	handleReminder() {
 		this.reminderTicks++;
-		if (this.forgotReminders < 3) {
+		if (this.forgotReminders < this.settings.missedRemindersBeforeIntensive) {
 			if (this.reminderTicks % (this.settings.reminderInterval * 60)) {
 				return;
 			}
 		} else {
-			if (this.reminderTicks % 10) {
+			if (this.reminderTicks % this.settings.intensiveReminderInterval) {
 				return;
 			}
 		}

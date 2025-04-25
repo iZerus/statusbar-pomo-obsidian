@@ -12,6 +12,8 @@ export interface PomoSettings {
 	autostartTimer: boolean;
 	numAutoCycles: number;
 	tictacVolume: number;
+	missedRemindersBeforeIntensive: number;
+	intensiveReminderInterval: number;
 	reminderInterval: number;
 	reminderIcon: boolean;
 	showCycles: boolean;
@@ -39,6 +41,8 @@ export const DEFAULT_SETTINGS: PomoSettings = {
 	autostartTimer: true,
 	numAutoCycles: 0,
 	tictacVolume: 50,
+	missedRemindersBeforeIntensive: 3,
+	intensiveReminderInterval: 10,
 	reminderInterval: 3,
 	reminderIcon: true,
 	showCycles: false,
@@ -146,6 +150,26 @@ export class PomoSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.reminderInterval.toString())
 				.onChange(value => {
 					this.plugin.settings.reminderInterval = setNumericValue(value, DEFAULT_SETTINGS.reminderInterval, this.plugin.settings.reminderInterval);
+					this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName("Missed reminders before the intensive reminder")
+			.setDesc("Leave blank for default")
+			.addText(text => text
+				.setValue(this.plugin.settings.missedRemindersBeforeIntensive.toString())
+				.onChange(value => {
+					this.plugin.settings.missedRemindersBeforeIntensive = setNumericValue(value, DEFAULT_SETTINGS.missedRemindersBeforeIntensive, this.plugin.settings.missedRemindersBeforeIntensive);
+					this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName("Intensive reminder interval (seconds)")
+			.setDesc("Leave blank for default")
+			.addText(text => text
+				.setValue(this.plugin.settings.intensiveReminderInterval.toString())
+				.onChange(value => {
+					this.plugin.settings.intensiveReminderInterval = setNumericValue(value, DEFAULT_SETTINGS.intensiveReminderInterval, this.plugin.settings.intensiveReminderInterval);
 					this.plugin.saveSettings();
 				}));
 		
