@@ -39,7 +39,7 @@ export default class PomoTimerPlugin extends Plugin {
 		/* Reminder */
 		this.registerInterval(window.setInterval(async () => {
 			this.timer.handleReminder();
-		}, 1_000 * 60 * this.settings.reminderInterval));
+		}, 1_000));
 
 		this.addCommand({
 			id: 'start-satusbar-pomo',
