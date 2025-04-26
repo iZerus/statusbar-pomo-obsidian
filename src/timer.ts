@@ -92,7 +92,7 @@ export class Timer {
 			}
 
 			if (this.paused === true) {
-				if (this.settings.hideTime) {
+				if (this.settings.hideTime && this.mode == Mode.Pomo) {
 					return pomos_in_cycle + timer_type_symbol + "--:--" + reminder_icon + missedReminderCount; //just show the paused time
 				} else {
 					return pomos_in_cycle + timer_type_symbol + millisecsToString(this.pausedTime) + reminder_icon + missedReminderCount; //just show the paused time
@@ -102,7 +102,7 @@ export class Timer {
 			}
 
 			const countDown = this.getCountdown();
-			if (this.settings.hideTime) {
+			if (this.settings.hideTime && this.mode == Mode.Pomo) {
 				const countDownSecs = Math.round(countDown / 1000);
 				let placeholder;
 				switch (countDownSecs % 2) {

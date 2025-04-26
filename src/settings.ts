@@ -161,7 +161,7 @@ export class PomoSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Pause reminder interval (minutes)")
-			.setDesc("You can enable or disable the reminder of paused timer by 'Toggle pause reminder mode'. The setting will be applied after the restart. Leave blank for default")
+			.setDesc("You can enable or disable the reminder of paused timer by 'Toggle pause reminder mode'. Leave blank for default")
 			.addText(text => text
 				.setValue(this.plugin.settings.reminderInterval.toString())
 				.onChange(value => {
@@ -235,7 +235,7 @@ export class PomoSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Hide time")
-			.setDesc("Hide the remaining time")
+			.setDesc("Hide the remaining time for pomodoro")
 			.addToggle(toggle => toggle
 					.setValue(this.plugin.settings.hideTime)
 					.onChange(value => {
