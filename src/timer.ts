@@ -67,6 +67,8 @@ export class Timer {
 				timer_type_symbol = "🏖️ ";
 				if (this.mode === Mode.Pomo) {
 					timer_type_symbol = "🍅 ";
+				} else if (this.mode === Mode.LongBreak) {
+					timer_type_symbol = "🧘 ";
 				}
 			}
 
@@ -443,7 +445,7 @@ function showSystemNotification(mode:Mode, useEmoji:boolean): void {
 			break;
 		}
 		case (Mode.NoTimer): {
-			let emoji = useEmoji ? "🍅" : ""
+			let emoji = useEmoji ? "🔔" : ""
 			text = `You forgot to turn on the timer ${emoji}`;
 			break;
 		}
