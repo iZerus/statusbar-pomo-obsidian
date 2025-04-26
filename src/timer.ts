@@ -121,9 +121,15 @@ export class Timer {
 			return ""; //fixes TypeError: failed to execute 'appendChild' on 'Node https://github.com/kzhovn/statusbar-pomo-obsidian/issues/4
 		}
 	}
+	
+	logDebug(message: string, ...args: any[]) {
+		if (this.settings.debugToConsole) {
+			console.debug('POMODORO', message, ...args);
+		}
+	}
 
 	async handleTimerEnd() {
-		console.debug('POMODORO', 'End timer', this.mode);
+		this.logDebug('End timer', this.mode);
 		if (this.mode === Mode.Pomo) { //completed another pomo
 			this.pomosSinceStart += 1;
 
@@ -158,7 +164,7 @@ export class Timer {
 	}
 
 	async quitTimer(): Promise<void> {
-		console.debug('POMODORO', 'Quit timer');
+		this.logDebug('Quit timer');
 		this.mode = Mode.NoTimer;
 		this.startTime = moment(0);
 		this.endTime = moment(0);
@@ -173,7 +179,7 @@ export class Timer {
 	}
 
 	pauseTimer(): void {
-		console.debug('POMODORO', 'Pause timer');
+		this.logDebug('Pause timer');
 		this.paused = true;
 		this.pausedTime = this.getCountdown();
 
@@ -183,7 +189,7 @@ export class Timer {
 	}
 
 	togglePause() {
-		console.debug('POMODORO', 'Toggle pause timer');
+		this.logDebug('Toggle pause timer');
 		if (this.paused === true) {
 			this.restartTimer();
 		} else if (this.mode !== Mode.NoTimer) { //if some timer running
@@ -193,7 +199,7 @@ export class Timer {
 	}
 
 	restartTimer(): void {
-		console.debug('POMODORO', 'Restart timer');
+		this.logDebug('Restart timer');
 		if (this.settings.logActiveNote === true && this.autoPaused === true) {
 			this.setLogFile();
 			this.autoPaused = false;
@@ -211,7 +217,7 @@ export class Timer {
 	startTimer(mode: Mode = null): void {
 		this.missedReminders = 0;
 		this.setupTimer(mode);
-		console.debug('POMODORO', 'Start timer', this.mode);
+		this.logDebug('Start timer', this.mode);
 		this.paused = false; //do I need this?
 
 		if (this.settings.logActiveNote === true) {
@@ -374,7 +380,7 @@ export class Timer {
 		}
 
 		this.reminderTicks++;
-		console.debug('POMODORO', 'Reminder tick', this.reminderTicks);
+		this.logDebug('Reminder tick', this.reminderTicks);
 
 		if (this.missedReminders < this.settings.missedRemindersBeforeIntensive) {
 			if (this.reminderTicks < (this.settings.reminderInterval * 60)) {
@@ -388,7 +394,7 @@ export class Timer {
 		this.reminderTicks = 0;
 
 		this.missedReminders++;
-		console.debug('POMODORO', 'Send reminder', this.missedReminders);
+		this.logDebug('Send reminder', this.missedReminders);
 		if (this.settings.useSystemNotification) {
 			showSystemNotification(Mode.NoTimer, this.settings.emoji);
 		}

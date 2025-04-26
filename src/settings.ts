@@ -33,6 +33,7 @@ export interface PomoSettings {
 	whiteNoise: boolean;
 	breakIncreasePomos: boolean;
 	showMissedReminders: boolean;
+	debugToConsole: boolean;
 }
 
 export const DEFAULT_SETTINGS: PomoSettings = {
@@ -64,6 +65,7 @@ export const DEFAULT_SETTINGS: PomoSettings = {
 	whiteNoise: false,
 	breakIncreasePomos: false,
 	showMissedReminders: false,
+	debugToConsole: false,
 }
 
 
@@ -322,6 +324,19 @@ export class PomoSettingTab extends PluginSettingTab {
 
 
 		/**************  Logging settings **************/
+		containerEl.createEl("h2", { text: "Debug"});
+		new Setting(containerEl)
+			.setName("Debug console logs")
+			.setDesc("Print debug log to console devtools")
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.debugToConsole)
+				.onChange(value => {
+					this.plugin.settings.debugToConsole = value;
+					this.plugin.saveSettings();
+					this.display() //force refresh
+				}));
+
+		/**************  Logging settings **************/
 		containerEl.createEl("h2", { text: "Logging"});
 
 		new Setting(containerEl)
@@ -392,6 +407,7 @@ export class PomoSettingTab extends PluginSettingTab {
 						this.plugin.settings.logActiveNote = value;
 						this.plugin.saveSettings();
 					}));
+
 		}
 	}
 }
