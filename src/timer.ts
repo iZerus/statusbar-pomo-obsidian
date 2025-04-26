@@ -370,7 +370,6 @@ export class Timer {
 	handleReminder() {
 		/* Если таймер активен, то пропускаем */
 		if (!this.reminderMode || (this.mode != Mode.NoTimer && !this.paused)) {
-			this.reminderTicks = 0;
 			return;
 		}
 
@@ -378,14 +377,15 @@ export class Timer {
 		console.debug('POMODORO', 'Reminder tick', this.reminderTicks);
 
 		if (this.missedReminders < this.settings.missedRemindersBeforeIntensive) {
-			if (this.reminderTicks % (this.settings.reminderInterval * 60)) {
+			if (this.reminderTicks < (this.settings.reminderInterval * 60)) {
 				return;
 			}
 		} else {
-			if (this.reminderTicks % this.settings.intensiveReminderInterval) {
+			if (this.reminderTicks < this.settings.intensiveReminderInterval) {
 				return;
 			}
 		}
+		this.reminderTicks = 0;
 
 		this.missedReminders++;
 		console.debug('POMODORO', 'Send reminder', this.missedReminders);
