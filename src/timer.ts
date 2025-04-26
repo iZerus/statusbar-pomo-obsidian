@@ -450,8 +450,9 @@ function showSystemNotification(mode:Mode, useEmoji:boolean): void {
 			break;
 		}
 	}
-	let emoji = useEmoji ? "🍅" : ""
-	let title = `Obsidian Pomodoro ${emoji}`;
+	// let emoji = useEmoji ? "🍅" : ""
+	// let title = `Obsidian Pomodoro ${emoji}`;
+	let title = `Obsidian Pomodoro`;
 
 	// Show system notification
 	const Notification = (electron as any).remote.Notification;
