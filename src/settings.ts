@@ -32,6 +32,7 @@ export interface PomoSettings {
 	fancyStatusBar: boolean;
 	whiteNoise: boolean;
 	breakIncreasePomos: boolean;
+	showMissedReminders: boolean;
 }
 
 export const DEFAULT_SETTINGS: PomoSettings = {
@@ -62,6 +63,7 @@ export const DEFAULT_SETTINGS: PomoSettings = {
 	fancyStatusBar: false,
 	whiteNoise: false,
 	breakIncreasePomos: false,
+	showMissedReminders: false,
 }
 
 
@@ -203,6 +205,17 @@ export class PomoSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.showCycles)
 				.onChange(value => {
 					this.plugin.settings.showCycles = value;
+					this.plugin.saveSettings();
+					this.display() //force refresh
+				}));
+
+		new Setting(containerEl)
+			.setName("Missed reminders in sidebar")
+			.setDesc("Show number of Missed reminders in sidebar. Should be enabled pause reminder icon")
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.showMissedReminders)
+				.onChange(value => {
+					this.plugin.settings.showMissedReminders = value;
 					this.plugin.saveSettings();
 					this.display() //force refresh
 				}));

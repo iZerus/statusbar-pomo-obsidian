@@ -86,11 +86,16 @@ export class Timer {
 				pomos_in_cycle += pomos == 0 ? this.settings.longBreakInterval : pomos;
 			}
 
+			let missedReminderCount = '';
+			if (this.settings.reminderIcon && this.reminderMode && this.settings.showMissedReminders) {
+				missedReminderCount = `${this.missedReminders}`;
+			}
+
 			if (this.paused === true) {
 				if (this.settings.hideTime) {
-					return pomos_in_cycle + timer_type_symbol + "--:--" + reminder_icon; //just show the paused time
+					return pomos_in_cycle + timer_type_symbol + "--:--" + reminder_icon + missedReminderCount; //just show the paused time
 				} else {
-					return pomos_in_cycle + timer_type_symbol + millisecsToString(this.pausedTime) + reminder_icon; //just show the paused time
+					return pomos_in_cycle + timer_type_symbol + millisecsToString(this.pausedTime) + reminder_icon + missedReminderCount; //just show the paused time
 				}
 			} else if (moment().isSameOrAfter(this.endTime)) {
 				await this.handleTimerEnd();
@@ -108,9 +113,9 @@ export class Timer {
 						placeholder = "-+:-+";
 						break;
 				}
-				return pomos_in_cycle + timer_type_symbol + placeholder + reminder_icon; //return display value
+				return pomos_in_cycle + timer_type_symbol + placeholder + reminder_icon + missedReminderCount; //return display value
 			} else {
-				return pomos_in_cycle + timer_type_symbol + millisecsToString(countDown) + reminder_icon; //return display value
+				return pomos_in_cycle + timer_type_symbol + millisecsToString(countDown) + reminder_icon + missedReminderCount; //return display value
 			}
 		} else {
 			return ""; //fixes TypeError: failed to execute 'appendChild' on 'Node https://github.com/kzhovn/statusbar-pomo-obsidian/issues/4
