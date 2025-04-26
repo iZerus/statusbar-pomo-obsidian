@@ -115,7 +115,7 @@ export class PomoSettingTab extends PluginSettingTab {
 					this.plugin.saveSettings();
 				}));
 
-		new Setting(containerEl)
+		/*new Setting(containerEl)
 			.setName("Long break interval")
 			.setDesc("Number of pomos before a long break; leave blank for default")
 			.addText(text => text
@@ -123,19 +123,21 @@ export class PomoSettingTab extends PluginSettingTab {
 				.onChange(value => {
 					this.plugin.settings.longBreakInterval = setNumericValue(value, DEFAULT_SETTINGS.longBreakInterval, this.plugin.settings.longBreakInterval);
 					this.plugin.saveSettings();
-				}));
+				}));*/
 
-		new Setting(containerEl)
-			.setName("Breaks increase pomo cycles")
-			.setDesc("If true, then you need to use the native button 'Start Pomodoro' in the ribbon menu")
-			.addToggle(toggle => toggle
-				.setValue(this.plugin.settings.breakIncreasePomos)
-				.onChange(value => {
-					this.plugin.settings.breakIncreasePomos = value;
-					this.plugin.saveSettings();
-				}));
+		if (this.plugin.settings.ribbonIcon) {
+			new Setting(containerEl)
+				.setName("Breaks increase pomo cycles")
+				.setDesc("If true, you need to use the native button 'Start Pomodoro' in the ribbon menu and 'Ribbon icon' should be enabled")
+				.addToggle(toggle => toggle
+					.setValue(this.plugin.settings.breakIncreasePomos)
+					.onChange(value => {
+						this.plugin.settings.breakIncreasePomos = value;
+						this.plugin.saveSettings();
+					}));
+		}
 
-		new Setting(containerEl)
+		/*new Setting(containerEl)
 			.setName("Autostart timer")
 			.setDesc("Start each pomodoro and break automatically. When off, click the sidebar icon on the left or use the toggle pause command to start the next timer")
 			.addToggle(toggle => toggle
@@ -144,9 +146,9 @@ export class PomoSettingTab extends PluginSettingTab {
 						this.plugin.settings.autostartTimer = value;
 						this.plugin.saveSettings();
 						this.display() //force refresh
-					}));
+					}));*/
 
-		if (this.plugin.settings.autostartTimer === false) {
+		/*if (this.plugin.settings.autostartTimer === false) {
 			new Setting(containerEl)
 				.setName("Cycles before pause")
 				.setDesc("Number of pomodoro + break cycles to run automatically before stopping. Default is 0 (stops after every pomodoro and every break)")
@@ -157,7 +159,9 @@ export class PomoSettingTab extends PluginSettingTab {
 						this.plugin.timer.cyclesSinceLastAutoStop = 0;
 						this.plugin.saveSettings();
 					}));
-		}
+		}*/
+
+		containerEl.createEl('h2', { text: 'Pause reminder' });
 
 		new Setting(containerEl)
 			.setName("Pause reminder interval (minutes)")
@@ -170,7 +174,7 @@ export class PomoSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName("Missed reminders before the intensive reminder")
+			.setName("Missed pause reminders before the intensive pause reminder")
 			.setDesc("Leave blank for default")
 			.addText(text => text
 				.setValue(this.plugin.settings.missedRemindersBeforeIntensive.toString())
@@ -180,7 +184,7 @@ export class PomoSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName("Intensive reminder interval (seconds)")
+			.setName("Intensive pause reminder interval (seconds)")
 			.setDesc("Leave blank for default")
 			.addText(text => text
 				.setValue(this.plugin.settings.intensiveReminderInterval.toString())
@@ -188,73 +192,31 @@ export class PomoSettingTab extends PluginSettingTab {
 					this.plugin.settings.intensiveReminderInterval = setNumericValue(value, DEFAULT_SETTINGS.intensiveReminderInterval, this.plugin.settings.intensiveReminderInterval);
 					this.plugin.saveSettings();
 				}));
-		
-		new Setting(containerEl)
-		.setName("Pause reminder icon")
-		.setDesc("Show the bell icon in the status bar when pause reminder mode is enabled")
-		.addToggle(toggle => toggle
-				.setValue(this.plugin.settings.reminderIcon)
-				.onChange(value => {
-					this.plugin.settings.reminderIcon = value;
-					this.plugin.saveSettings();
-					this.display() //force refresh
-				}));
-
-		new Setting(containerEl)
-		.setName("Pomodoro cycles in sidebar")
-		.setDesc("Show number of pomodoro cycles in sidebar")
-		.addToggle(toggle => toggle
-				.setValue(this.plugin.settings.showCycles)
-				.onChange(value => {
-					this.plugin.settings.showCycles = value;
-					this.plugin.saveSettings();
-					this.display() //force refresh
-				}));
-
-		new Setting(containerEl)
-			.setName("Missed reminders in sidebar")
-			.setDesc("Show number of Missed reminders in sidebar. Should be enabled pause reminder icon")
-			.addToggle(toggle => toggle
-				.setValue(this.plugin.settings.showMissedReminders)
-				.onChange(value => {
-					this.plugin.settings.showMissedReminders = value;
-					this.plugin.saveSettings();
-					this.display() //force refresh
-				}));
-
-		new Setting(containerEl)
-		.setName("Reminder with sound")
-		.setDesc("Play a sound during a reminder")
-		.addToggle(toggle => toggle
-				.setValue(this.plugin.settings.playReminderSound)
-				.onChange(value => {
-					this.plugin.settings.playReminderSound = value;
-					this.plugin.saveSettings();
-					this.display() //force refresh
-				}));
-
-		new Setting(containerEl)
-			.setName("Hide time")
-			.setDesc("Hide the remaining time for pomodoro")
-			.addToggle(toggle => toggle
-					.setValue(this.plugin.settings.hideTime)
-					.onChange(value => {
-						this.plugin.settings.hideTime = value;
-						this.plugin.saveSettings();
-					}));
 
 
 		/************** Appearance ************************/
 
 		containerEl.createEl("h2", { text: "Appearance"});
+
 		new Setting(containerEl)
-		.setName("Sidebar icon")
-		.setDesc("Toggle left sidebar icon. Restart Obsidian for the change to take effect")
+			.setName("System notification")
+			.setDesc("Use system notifications at the end of each pomodoro and break")
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.useSystemNotification)
+				.onChange(value => {
+					this.plugin.settings.useSystemNotification = value;
+					this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+		.setName("Ribbon icon")
+		.setDesc("Toggle left ribbon icon. Restart Obsidian for the change to take effect")
 		.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.ribbonIcon)
 				.onChange(value => {
 					this.plugin.settings.ribbonIcon = value;
 					this.plugin.saveSettings();
+					this.display() //force refresh
 				}));
 
 		new Setting(containerEl)
@@ -265,15 +227,51 @@ export class PomoSettingTab extends PluginSettingTab {
 				.onChange(value => {
 					this.plugin.settings.emoji = value;
 					this.plugin.saveSettings();
+					this.display() //force refresh
 				}));
 
+		if (this.plugin.settings.emoji) {
+			new Setting(containerEl)
+				.setName("Pomodoro cycles in sidebar")
+				.setDesc("Show number of pomodoro cycles in sidebar")
+				.addToggle(toggle => toggle
+					.setValue(this.plugin.settings.showCycles)
+					.onChange(value => {
+						this.plugin.settings.showCycles = value;
+						this.plugin.saveSettings();
+					}));
+		}
+
 		new Setting(containerEl)
-			.setName("System notification")
-			.setDesc("Use system notifications at the end of each pomodoro and break")
+			.setName("Pause reminder icon")
+			.setDesc("Show the bell icon in the status bar when pause reminder mode is enabled")
 			.addToggle(toggle => toggle
-				.setValue(this.plugin.settings.useSystemNotification)
+				.setValue(this.plugin.settings.reminderIcon)
 				.onChange(value => {
-					this.plugin.settings.useSystemNotification = value;
+					this.plugin.settings.reminderIcon = value;
+					this.plugin.saveSettings();
+					this.display() //force refresh
+				}));
+
+		if (this.plugin.settings.reminderIcon) {
+			new Setting(containerEl)
+				.setName("Missed pause reminders in sidebar")
+				.setDesc("Show number of missed pause reminders in sidebar. Should be enabled pause reminder icon")
+				.addToggle(toggle => toggle
+					.setValue(this.plugin.settings.showMissedReminders)
+					.onChange(value => {
+						this.plugin.settings.showMissedReminders = value;
+						this.plugin.saveSettings();
+					}));
+		}
+
+		new Setting(containerEl)
+			.setName("Hide time")
+			.setDesc("Hide the remaining time for pomodoro")
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.hideTime)
+				.onChange(value => {
+					this.plugin.settings.hideTime = value;
 					this.plugin.saveSettings();
 				}));
 
@@ -322,6 +320,17 @@ export class PomoSettingTab extends PluginSettingTab {
 					this.plugin.saveSettings();
 				}));
 
+		new Setting(containerEl)
+			.setName("Pause reminder with sound")
+			.setDesc("Play a sound during a pause reminder")
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.playReminderSound)
+				.onChange(value => {
+					this.plugin.settings.playReminderSound = value;
+					this.plugin.saveSettings();
+					this.display() //force refresh
+				}));
+
 
 		/**************  Logging settings **************/
 		containerEl.createEl("h2", { text: "Debug"});
@@ -337,9 +346,9 @@ export class PomoSettingTab extends PluginSettingTab {
 				}));
 
 		/**************  Logging settings **************/
-		containerEl.createEl("h2", { text: "Logging"});
+		/*containerEl.createEl("h2", { text: "Logging"});*/
 
-		new Setting(containerEl)
+		/*new Setting(containerEl)
 			.setName("Logging")
 			.setDesc("Enable a log of completed pomodoros")
 			.addToggle(toggle => toggle
@@ -355,10 +364,10 @@ export class PomoSettingTab extends PluginSettingTab {
 
 						this.plugin.saveSettings();
 						this.display(); //force refresh
-					}));
+					}));*/
 
 		//various logging settings; only show if logging is enabled (currently does not autohide, only)
-		if (this.plugin.settings.logging === true) {
+		/*if (this.plugin.settings.logging === true) {
 
 			new Setting(containerEl)
 				.setName("Log file")
@@ -408,7 +417,7 @@ export class PomoSettingTab extends PluginSettingTab {
 						this.plugin.saveSettings();
 					}));
 
-		}
+		}*/
 	}
 }
 
