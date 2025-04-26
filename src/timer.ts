@@ -387,7 +387,7 @@ export class Timer {
 		if (this.settings.playReminderSound) {
 			playReminder();
 		}
-		new Notice('You forgot to turn on the timer ' + this.missedReminders);
+		new Notice('You forgot to turn on the timer');
 	}
 }
 
