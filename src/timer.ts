@@ -435,13 +435,13 @@ function showSystemNotification(mode:Mode, useEmoji:boolean): void {
 	switch (mode) {
 		case (Mode.Pomo): {
 			let emoji = useEmoji ? "🏖" : ""
-			text = `End of the pomodoro, time to take a break ${emoji}`;
+			text = `Time to take a break ${emoji}`;
 			break;
 		}
 		case (Mode.ShortBreak):
 		case (Mode.LongBreak): {
 			let emoji = useEmoji ? "🍅" : ""
-			text = `End of the break, time for the next pomodoro ${emoji}`;
+			text = `Time for the next pomodoro ${emoji}`;
 			break;
 		}
 		case (Mode.NoTimer): {
