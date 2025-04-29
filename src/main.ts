@@ -7,6 +7,7 @@ export default class PomoTimerPlugin extends Plugin {
 	settings: PomoSettings;
 	statusBar: HTMLElement;
 	timer: Timer;
+	worker: Worker;
 
 	async onload() {
 		console.log('Loading status bar pomodoro timer');
@@ -30,16 +31,26 @@ export default class PomoTimerPlugin extends Plugin {
 			});
 		}
 
-		/*Update status bar timer ever half second
-		  Ideally should change so only updating when in timer mode
-		  - regular conditional doesn't remove after quit, need unload*/
-		this.registerInterval(window.setInterval(async () =>
-			this.statusBar.setText(await this.timer.setStatusBarText()), 500));
-
-		/* Reminder */
-		this.registerInterval(window.setInterval(async () => {
-			this.timer.handleReminder();
-		}, 1_000));
+		const workerCode = `
+			setInterval(() => {
+				self.postMessage({ type: 'reminder' });
+			}, 1000);
+			setInterval(() => {
+				self.postMessage({ type: 'pomodoro' });
+			}, 500);
+		`;
+		const workerBlob = new Blob([workerCode], { type: 'application/javascript' });
+		this.worker = new Worker(URL.createObjectURL(workerBlob));
+		this.worker.onmessage = async (event: MessageEvent) => {
+			switch (event.data.type) {
+				case 'pomodoro':
+					this.statusBar.setText(await this.timer.setStatusBarText())
+					break;
+				case 'reminder':
+					this.timer.handleReminder()
+					break;
+			}
+		};
 
 		this.addCommand({
 			id: 'start-satusbar-pomo',
@@ -170,6 +181,7 @@ export default class PomoTimerPlugin extends Plugin {
 
 	onunload() {
 		this.timer.quitTimer();
+		this.worker.terminate();
 		console.log('Unloading status bar pomodoro timer');
 	}
 
