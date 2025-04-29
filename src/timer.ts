@@ -219,7 +219,7 @@ export class Timer {
 	startTimer(mode: Mode = null): void {
 		this.missedReminders = 0;
 		this.setupTimer(mode);
-		this.logDebug('Start timer', this.mode);
+		this.logDebug('Start timer', ['Pomo', 'ShortBreak', 'LongBreak', 'NoTimer'][this.mode]);
 		this.paused = false; //do I need this?
 
 		if (this.settings.logActiveNote === true) {
