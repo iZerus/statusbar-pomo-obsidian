@@ -39,7 +39,7 @@ export class Timer {
 		this.settings = plugin.settings;
 		this.mode = Mode.NoTimer;
 		this.paused = false;
-		this.reminderMode = false;
+		this.reminderMode = plugin.settings.reminderEnabledByDefault;
 		this.pomosSinceStart = 0;
 		this.cyclesSinceLastAutoStop = 0;
 		this.missedReminders = 0;

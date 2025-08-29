@@ -23,6 +23,7 @@ export interface PomoSettings {
 	emoji: boolean;
 	notificationSound: boolean;
 	useSystemNotification: boolean;
+	reminderEnabledByDefault: boolean;
 	backgroundNoiseFile: string;
 	logging: boolean;
 	logFile: string;
@@ -50,6 +51,7 @@ export const DEFAULT_SETTINGS: PomoSettings = {
 	reminderIcon: true,
 	showCycles: false,
 	playReminderSound: true,
+	reminderEnabledByDefault: false,
 	hideTime: false,
 	ribbonIcon: true,
 	emoji: true,
@@ -193,6 +195,15 @@ export class PomoSettingTab extends PluginSettingTab {
 					this.plugin.saveSettings();
 				}));
 
+		new Setting(containerEl)
+			.setName("Enabled by default")
+			.setDesc("Pause reminder enabled by default")
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.reminderEnabledByDefault)
+				.onChange(value => {
+					this.plugin.settings.reminderEnabledByDefault = value;
+					this.plugin.saveSettings();
+				}));
 
 		/************** Appearance ************************/
 
