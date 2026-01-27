@@ -8,6 +8,30 @@ export default class PomoTimerPlugin extends Plugin {
 	statusBar: HTMLElement;
 	timer: Timer;
 	worker: Worker;
+	lastAutoEnableDate: Date;
+
+	handleAutoEnableReminder() {
+		if (this.timer.reminderMode) {
+			return;
+		}
+		if (!this.settings.autoEnableReminderAtTime) {
+			return;
+		}
+		const currentDate = new Date();
+		if (currentDate.getHours() < this.settings.autoEnableReminderHour) {
+			return;
+		}
+		if (this.lastAutoEnableDate !== undefined) {
+			const lastDateStr = this.lastAutoEnableDate.toISOString().split('T')[0];
+			const currentStr = currentDate.toISOString().split('T')[0];
+			if (lastDateStr === currentStr) {
+        		return;
+			}
+    	}
+		this.timer.reminderMode = true;
+		this.lastAutoEnableDate = currentDate;
+		new Notice(`Pause reminder mode is on automatically`);
+	}
 
 	async onload() {
 		console.log('Loading status bar pomodoro timer');
@@ -50,6 +74,7 @@ export default class PomoTimerPlugin extends Plugin {
 					this.timer.handleReminder()
 					break;
 			}
+			this.handleAutoEnableReminder();
 		};
 
 		this.addCommand({
@@ -115,6 +140,10 @@ export default class PomoTimerPlugin extends Plugin {
 				if (leaf) {
 					if (!checking) {
 						this.timer.reminderMode = !this.timer.reminderMode;
+						// Чтобы он не включился автоматически снова
+						if (this.settings.autoEnableReminderAtTime) {
+							this.lastAutoEnableDate = new Date();
+						}
 						new Notice(`Pause reminder mode is ${this.timer.reminderMode ? 'on' : 'off'}`);
 					}
 					return true;
