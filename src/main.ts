@@ -30,7 +30,12 @@ export default class PomoTimerPlugin extends Plugin {
     	}
 		this.timer.reminderMode = true;
 		this.lastAutoEnableDate = currentDate;
-		new Notice(`Pause reminder mode is on automatically`);
+		if (this.settings.autoResetReminderWhenAutoEnabled) {
+			this.timer.quitTimer();
+			new Notice(`Pause reminder mode is on automatically and reset`);
+		} else {
+			new Notice(`Pause reminder mode is on automatically`);
+		}
 	}
 
 	async onload() {

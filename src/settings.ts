@@ -26,6 +26,7 @@ export interface PomoSettings {
 	reminderEnabledByDefault: boolean;
 	autoEnableReminderAtTime: boolean;
 	autoEnableReminderHour: number;
+	autoResetReminderWhenAutoEnabled: boolean;
 	backgroundNoiseFile: string;
 	logging: boolean;
 	logFile: string;
@@ -55,6 +56,7 @@ export const DEFAULT_SETTINGS: PomoSettings = {
 	playReminderSound: true,
 	reminderEnabledByDefault: false,
 	autoEnableReminderAtTime: false,
+	autoResetReminderWhenAutoEnabled: false,
 	autoEnableReminderHour: 8,
 	hideTime: false,
 	ribbonIcon: true,
@@ -230,6 +232,16 @@ export class PomoSettingTab extends PluginSettingTab {
 					this.plugin.settings.autoEnableReminderHour = setNumericValue(value, DEFAULT_SETTINGS.autoEnableReminderHour, this.plugin.settings.autoEnableReminderHour);
 					// Для тестирования функционала
 					this.plugin.lastAutoEnableDate = undefined;
+					this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName("Auto reset reminder")
+			.setDesc("Auto reset pause reminder when auto enabled on")
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.autoResetReminderWhenAutoEnabled)
+				.onChange(value => {
+					this.plugin.settings.autoResetReminderWhenAutoEnabled = value;
 					this.plugin.saveSettings();
 				}));
 
