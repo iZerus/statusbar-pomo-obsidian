@@ -9,6 +9,7 @@ export default class PomoTimerPlugin extends Plugin {
 	timer: Timer;
 	worker: Worker;
 	lastAutoEnableDate: Date;
+	lastAutoDisableDate: Date;
 
 	handleAutoEnableReminder() {
 		if (this.timer.reminderMode) {
@@ -36,6 +37,29 @@ export default class PomoTimerPlugin extends Plugin {
 		} else {
 			new Notice(`Pause reminder mode is on automatically`);
 		}
+	}
+
+	handleAutoDisableReminder() {
+		if (!this.timer.reminderMode) {
+			return;
+		}
+		if (!this.settings.autoDisableReminderAtTime) {
+			return;
+		}
+		const currentDate = new Date();
+		if (currentDate.getHours() < this.settings.autoDisableReminderHour) {
+			return;
+		}
+		if (this.lastAutoDisableDate !== undefined) {
+			const lastDateStr = this.lastAutoDisableDate.toISOString().split('T')[0];
+			const currentStr = currentDate.toISOString().split('T')[0];
+			if (lastDateStr === currentStr) {
+				return;
+			}
+		}
+		this.timer.reminderMode = false;
+		this.lastAutoDisableDate = currentDate;
+		new Notice(`Pause reminder mode is off automatically`);
 	}
 
 	async onload() {
@@ -80,6 +104,7 @@ export default class PomoTimerPlugin extends Plugin {
 					break;
 			}
 			this.handleAutoEnableReminder();
+			this.handleAutoDisableReminder();
 		};
 
 		this.addCommand({
@@ -145,9 +170,11 @@ export default class PomoTimerPlugin extends Plugin {
 				if (leaf) {
 					if (!checking) {
 						this.timer.reminderMode = !this.timer.reminderMode;
-						// Чтобы он не включился автоматически снова
 						if (this.settings.autoEnableReminderAtTime) {
 							this.lastAutoEnableDate = new Date();
+						}
+						if (this.settings.autoDisableReminderAtTime) {
+							this.lastAutoDisableDate = new Date();
 						}
 						new Notice(`Pause reminder mode is ${this.timer.reminderMode ? 'on' : 'off'}`);
 					}
