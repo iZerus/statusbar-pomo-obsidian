@@ -173,9 +173,6 @@ export default class PomoTimerPlugin extends Plugin {
 						if (this.settings.autoEnableReminderAtTime) {
 							this.lastAutoEnableDate = new Date();
 						}
-						if (this.settings.autoDisableReminderAtTime) {
-							this.lastAutoDisableDate = new Date();
-						}
 						new Notice(`Pause reminder mode is ${this.timer.reminderMode ? 'on' : 'off'}`);
 					}
 					return true;
