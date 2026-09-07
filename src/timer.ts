@@ -13,6 +13,7 @@ export const enum Mode {
 	Pomo,
 	ShortBreak,
 	LongBreak,
+	Lunch,
 	NoTimer
 }
 

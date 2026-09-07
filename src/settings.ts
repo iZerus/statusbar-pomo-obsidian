@@ -8,6 +8,7 @@ export interface PomoSettings {
 	pomo: number;
 	shortBreak: number;
 	longBreak: number;
+	lunch: number;
 	longBreakInterval: number;
 	autostartTimer: boolean;
 	numAutoCycles: number;
@@ -46,6 +47,7 @@ export const DEFAULT_SETTINGS: PomoSettings = {
 	pomo: 25,
 	shortBreak: 5,
 	longBreak: 15,
+	lunch: 60,
 	longBreakInterval: 4,
 	autostartTimer: true,
 	numAutoCycles: 0,
@@ -124,6 +126,16 @@ export class PomoSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.longBreak.toString())
 				.onChange(value => {
 					this.plugin.settings.longBreak = setNumericValue(value, DEFAULT_SETTINGS.longBreak, this.plugin.settings.longBreak);
+					this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName("Lunch time (minutes)")
+			.setDesc("Leave blank for default")
+			.addText(text => text
+				.setValue(this.plugin.settings.lunch.toString())
+				.onChange(value => {
+					this.plugin.settings.lunch = setNumericValue(value, DEFAULT_SETTINGS.lunch, this.plugin.settings.lunch);
 					this.plugin.saveSettings();
 				}));
 
