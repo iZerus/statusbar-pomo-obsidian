@@ -310,7 +310,7 @@ export class PomoSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 		.setName("Timer emoji")
-		.setDesc("Toggle 🧘/🏖️/🍅 emoji that indicate whether a timer is a pomodoro or a break.")
+		.setDesc("Toggle 🧘/🏖️/🍽️/🍅 emoji that indicate whether a timer is a pomodoro, a break, or lunch.")
 		.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.emoji)
 				.onChange(value => {

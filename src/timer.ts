@@ -70,6 +70,8 @@ export class Timer {
 					timer_type_symbol = "🍅 ";
 				} else if (this.mode === Mode.LongBreak) {
 					timer_type_symbol = "🧘 ";
+				} else if (this.mode === Mode.Lunch) {
+					timer_type_symbol = "🍽️ ";
 				}
 			}
 
@@ -143,7 +145,7 @@ export class Timer {
 			if (this.settings.whiteNoise === true) {
 				this.whiteNoisePlayer.stopWhiteNoise();
 			}
-		} else if (this.mode === Mode.ShortBreak || this.mode === Mode.LongBreak) {
+		} else if (this.mode === Mode.ShortBreak || this.mode === Mode.LongBreak || this.mode === Mode.Lunch) {
 			this.cyclesSinceLastAutoStop += 1;
 		}
 
@@ -220,7 +222,7 @@ export class Timer {
 	startTimer(mode: Mode = null): void {
 		this.missedReminders = 0;
 		this.setupTimer(mode);
-		this.logDebug('Start timer', ['Pomo', 'ShortBreak', 'LongBreak', 'NoTimer'][this.mode]);
+		this.logDebug('Start timer', ['Pomo', 'ShortBreak', 'LongBreak', 'Lunch', 'NoTimer'][this.mode]);
 		this.paused = false; //do I need this?
 
 		if (this.settings.logActiveNote === true) {
@@ -274,6 +276,9 @@ export class Timer {
 			case Mode.LongBreak: {
 				return this.settings.longBreak * MILLISECS_IN_MINUTE;
 			}
+			case Mode.Lunch: {
+				return this.settings.lunch * MILLISECS_IN_MINUTE;
+			}
 			case Mode.NoTimer: {
 				throw new Error("Mode NoTimer does not have an associated time value");
 			}
@@ -306,6 +311,10 @@ export class Timer {
 				new Notice(`Starting ${time} ${unit} break.`);
 				break;
 			}
+			case (Mode.Lunch): {
+				new Notice(`Starting ${time} ${unit} lunch.`);
+				break;
+			}
 			case (Mode.NoTimer): {
 				new Notice('Quitting pomodoro timer.');
 				break;
@@ -322,6 +331,10 @@ export class Timer {
 			case (Mode.ShortBreak):
 			case (Mode.LongBreak): {
 				new Notice(`Restarting break.`);
+				break;
+			}
+			case (Mode.Lunch): {
+				new Notice(`Restarting lunch.`);
 				break;
 			}
 		}
@@ -440,7 +453,8 @@ function showSystemNotification(mode:Mode, useEmoji:boolean): void {
 			break;
 		}
 		case (Mode.ShortBreak):
-		case (Mode.LongBreak): {
+		case (Mode.LongBreak):
+		case (Mode.Lunch): {
 			let emoji = useEmoji ? "🍅" : ""
 			text = `Time for the next pomodoro ${emoji}`;
 			break;
