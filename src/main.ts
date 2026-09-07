@@ -162,6 +162,22 @@ export default class PomoTimerPlugin extends Plugin {
 		});
 
 		this.addCommand({
+			id: 'start-lunch-satusbar-pomo',
+			name: 'Start lunch',
+			icon: 'play',
+			checkCallback: (checking: boolean) => {
+				let leaf = this.app.workspace.activeLeaf;
+				if (leaf) {
+					if (!checking) {
+						this.timer.startTimer(Mode.Lunch);
+					}
+					return true;
+				}
+				return false;
+			}
+		});
+
+		this.addCommand({
 			id: 'toggle-reminder-satusbar-pomo',
 			name: 'Toggle pause reminder mode',
 			icon: 'play',
